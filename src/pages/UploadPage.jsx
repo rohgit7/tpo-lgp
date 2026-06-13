@@ -34,7 +34,6 @@ return (
     <Navbar />
     <div className="flex items-center justify-center py-20">
       <div className="bg-white p-10 rounded-2xl shadow-lg w-full max-w-lg text-center">
-        <div className="text-5xl mb-4">📂</div>
         <h2 className="text-2xl font-bold text-gray-800 mb-2">Upload your Financial Data</h2>
         <p className="text-gray-500 text-sm mb-6">Supports CSV, Excel and PDF files</p>
         <input

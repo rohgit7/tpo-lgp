@@ -46,7 +46,8 @@ const handleChat = async () => {
 
   try {
     const res = await client.post(`/chat/${fileId}`, { query });
-    const botMessage = { role: "bot", text: res.data.answer };
+   const cleanAnswer = res.data.answer.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
+  const botMessage = { role: "bot", text: cleanAnswer };
     setMessages(prev => [...prev, botMessage]);
   } catch (err) {
   console.error("chat error:", err);
@@ -97,9 +98,7 @@ const handleChat = async () => {
         <p className="text-gray-400">Loading chart...</p>
       )}
 
-      <div className="bg-white p-6 rounded-xl shadow mb-8">
-        <h2 className="text-lg font-semibold mb-4">Anomalies Detected</h2>
-        <div className="bg-white p-6 rounded-xl shadow mb-8">
+    <div className="bg-white p-6 rounded-xl shadow mb-8">
   <div className="flex items-center gap-3 mb-4">
     <h2 className="text-lg font-semibold">Anomalies Detected</h2>
     {anomalies && (
@@ -138,17 +137,14 @@ const handleChat = async () => {
     <p className="text-gray-400">Loading anomalies...</p>
   )}
 </div>
-      </div>
 
       <div className="bg-white p-6 rounded-xl shadow mb-8">
   <div className="flex items-center gap-2 mb-4">
-    <span className="text-2xl">🤖</span>
     <h2 className="text-lg font-semibold">Chat with Shakun AI</h2>
   </div>
   <div className="h-72 overflow-y-auto border border-gray-100 rounded-xl p-4 mb-4 flex flex-col gap-3 bg-gray-50">
     {messages.length === 0 && (
       <div className="flex flex-col items-center justify-center h-full text-gray-400">
-        <span className="text-4xl mb-2">💬</span>
         <p className="text-sm">Ask anything about your financial data...</p>
       </div>
     )}
