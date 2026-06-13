@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import client from "../api/client";
 import Plotly from "plotly.js-dist-min";
+import Navbar from "../components/Navbar";
 
 export default function DashboardPage() {
   const { fileId } = useParams();
@@ -57,40 +58,60 @@ const handleChat = async () => {
 };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+  <div className="min-h-screen bg-gray-200">
+    <Navbar />
+    <div className="max-w-7xl mx-auto p-8">
       <h1 className="text-2xl font-bold mb-6">Shakun AI Dashboard</h1>
+      
       {summary ? (
-  <div className="grid grid-cols-3 gap-4 mb-8">
-    <div className="bg-white p-6 rounded-xl shadow">
-      <p className="text-gray-500 text-sm">Total Rows</p>
-      <p className="text-3xl font-bold">{summary.rows}</p>
+  <div className="grid grid-cols-3 gap-6 mb-8">
+    <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+      <div>
+        <p className="text-gray-500 text-sm font-medium uppercase tracking-wide">Total Rows</p>
+        <p className="text-3xl font-bold text-gray-800">{summary.rows.toLocaleString()}</p>
+      </div>
     </div>
-    <div className="bg-white p-6 rounded-xl shadow">
-      <p className="text-gray-500 text-sm">Total Amount</p>
-      <p className="text-3xl font-bold">{summary.total_amount?.toFixed(2)}</p>
+    <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+      <div>
+        <p className="text-gray-500 text-sm font-medium uppercase tracking-wide">Total Amount</p>
+        <p className="text-3xl font-bold text-gray-800">${summary.total_amount?.toLocaleString()}</p>
+      </div>
     </div>
-    <div className="bg-white p-6 rounded-xl shadow">
-      <p className="text-gray-500 text-sm">Anomalies Detected</p>
-      <p className="text-3xl font-bold text-red-500">{summary.anomaly_count}</p>
+    <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4 border-l-4 border-red-500">
+      <div>
+        <p className="text-gray-500 text-sm font-medium uppercase tracking-wide">Anomalies Detected</p>
+        <p className="text-3xl font-bold text-red-500">{summary.anomaly_count}</p>
+      </div>
     </div>
   </div>
 ) : (
   <p className="text-gray-400">Loading summary...</p>
 )}
-{chartData ? (
-  <div className="bg-white p-6 rounded-xl shadow mb-8">
-    <h2 className="text-lg font-semibold mb-4">Money Flow</h2>
-   <div id="plotly-chart" style={{ width: "100%", height: "400px" }}></div>
+
+      {chartData ? (
+        <div className="bg-white p-6 rounded-xl shadow mb-8">
+          <h2 className="text-lg font-semibold mb-4">Money Flow</h2>
+          <div id="plotly-chart" style={{ width: "100%", height: "400px" }}></div>
+        </div>
+      ) : (
+        <p className="text-gray-400">Loading chart...</p>
+      )}
+
+      <div className="bg-white p-6 rounded-xl shadow mb-8">
+        <h2 className="text-lg font-semibold mb-4">Anomalies Detected</h2>
+        <div className="bg-white p-6 rounded-xl shadow mb-8">
+  <div className="flex items-center gap-3 mb-4">
+    <h2 className="text-lg font-semibold">Anomalies Detected</h2>
+    {anomalies && (
+      <span className="bg-red-100 text-red-600 text-xs font-bold px-3 py-1 rounded-full">
+        {anomalies.count} flagged
+      </span>
+    )}
   </div>
-) : (
-  <p className="text-gray-400">Loading chart...</p>
-)
-}<div className="bg-white p-6 rounded-xl shadow mb-8">
-  <h2 className="text-lg font-semibold mb-4">Anomalies Detected</h2>
   {anomalies ? (
     <div className="overflow-x-auto">
       <table className="w-full text-sm text-left">
-        <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+        <thead className="bg-red-50 text-red-600 uppercase text-xs">
           <tr>
             {anomalies.anomalies.length > 0 &&
               Object.keys(anomalies.anomalies[0]).map(col => (
@@ -117,46 +138,55 @@ const handleChat = async () => {
     <p className="text-gray-400">Loading anomalies...</p>
   )}
 </div>
-<div className="bg-white p-6 rounded-xl shadow mb-8">
-  <h2 className="text-lg font-semibold mb-4">Chat with your Data</h2>
-  
-  <div className="h-64 overflow-y-auto border rounded-lg p-4 mb-4 flex flex-col gap-3">
+      </div>
+
+      <div className="bg-white p-6 rounded-xl shadow mb-8">
+  <div className="flex items-center gap-2 mb-4">
+    <span className="text-2xl">🤖</span>
+    <h2 className="text-lg font-semibold">Chat with Shakun AI</h2>
+  </div>
+  <div className="h-72 overflow-y-auto border border-gray-100 rounded-xl p-4 mb-4 flex flex-col gap-3 bg-gray-50">
     {messages.length === 0 && (
-      <p className="text-gray-400 text-sm text-center">Ask anything about your data...</p>
+      <div className="flex flex-col items-center justify-center h-full text-gray-400">
+        <span className="text-4xl mb-2">💬</span>
+        <p className="text-sm">Ask anything about your financial data...</p>
+      </div>
     )}
     {messages.map((msg, i) => (
       <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-        <div className={`px-4 py-2 rounded-xl max-w-xs text-sm ${msg.role === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-800"}`}>
+        <div className={`px-4 py-2 rounded-2xl max-w-sm text-sm shadow-sm ${msg.role === "user" ? "bg-blue-600 text-white rounded-br-none" : "bg-white text-gray-800 rounded-bl-none border"}`}>
           {msg.text}
         </div>
       </div>
     ))}
     {chatLoading && (
       <div className="flex justify-start">
-        <div className="px-4 py-2 rounded-xl bg-gray-100 text-gray-500 text-sm">Thinking...</div>
+        <div className="px-4 py-2 rounded-2xl bg-white text-gray-500 text-sm border shadow-sm rounded-bl-none">
+          Thinking...
+        </div>
       </div>
     )}
   </div>
-
   <div className="flex gap-2">
     <input
       type="text"
       value={query}
       onChange={e => setQuery(e.target.value)}
       onKeyDown={e => e.key === "Enter" && handleChat()}
-      placeholder="Ask a question..."
-      className="flex-1 border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Ask a question about your data..."
+      className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
     />
     <button
       onClick={handleChat}
       disabled={chatLoading}
-      className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
+      className="bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 transition"
     >
       Send
     </button>
   </div>
 </div>
     </div>
-    
-  );
+  </div>
+);
+
 }
