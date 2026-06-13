@@ -23,7 +23,7 @@ export default function UploadPage() {
     const response = await client.post("/upload", formData);
     const fileId = response.data.file_id;
     navigate(`/dashboard/${fileId}`);
-  } catch (err) {
+  } catch  {
     setError("Upload failed. Please try again.");
   } finally {
     setLoading(false);
