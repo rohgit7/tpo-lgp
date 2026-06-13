@@ -1,0 +1,50 @@
+# Shakun — FastAPI Anomaly Detection API
+
+This project provides a FastAPI-based service to:  
+- Upload Excel/PDF files  
+- Detect anomalies in financial/transaction data  
+- Visualize money flow over time  
+- Ask natural-language questions about tabular data using **Google TAPAS**  
+
+---
+
+## 🚀 Features
+- **Upload** Excel (`.xlsx`, `.xls`) or PDF (`.pdf`) files  
+- **Detect anomalies** in numeric transaction columns (Isolation Forest)  
+- **Interactive chart** of money flow with anomalies highlighted  
+- **Chat with your data** (table QA with HuggingFace TAPAS model)  
+
+---
+
+## 📂 Project Structure
+.
+├── main.py # FastAPI application
+├── requirements.txt # Dependencies
+├── README.md # Project documentation
+└── .gitignore # Ignore cache/venv in GitHub
+
+
+---
+
+## 🛠️ Installation (Local)
+
+1. Clone this repo:
+   ```
+    git clone https://github.com/<your-username>/<repo-name>.git
+   cd <repo-name>
+2. Create a virtual environment:
+```
+python -m venv venv
+source venv/bin/activate   # On Linux/Mac
+venv\Scripts\activate      # On Windows
+```
+3. Install dependencies:
+ ```
+pip install -r requirements.txt
+```
+4. Run locally
+   ```
+   uvicorn main:app --reload
+```
+
+
